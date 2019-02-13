@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html ng-app="myApp">
 
 <head>
-    <meta charset="utf-8">
     <title>Contact list App</title>
     <meta name="description" content="" />
     <link href="css/styles.css" rel="stylesheet">
     <link href="css/gradients.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
     <script src="controllers/controller.js"></script>
 </head>
 
 <body ng-controller="AppCtrl">
     <div class="container">
         <h1 style="padding-top: 10px">Contact List App</h1> <input ng-model="searchedName" ng-submit="searchName()"></input>
-        <button ng-click="searchName()">Search</button>
+        <button ng-click="searchName()">Seaarch</button>
         <table class="table">
             <thead>
                 <!--Headings-->
