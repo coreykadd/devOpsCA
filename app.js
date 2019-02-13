@@ -24,9 +24,15 @@ mongoose.connection.once('open', function(){
 require('./routes/contactList.routes.js')(app);
 
 //Config
-app.listen(CONFIG.port, function(){ 
-  console.log('App listening on port 3000');
-});
+// app.listen(CONFIG.port, function(){ 
+//   console.log('App listening on port 3000');
+// });
+
+var app = http.createServer(function (req, res) {
+
+}).listen(CONFIG.port, '0.0.0.0');
+
+module.exports = app;
 
 // var app = http.createServer(function (req, res) {
 //   if (req.url.indexOf('/img') != -1) {
