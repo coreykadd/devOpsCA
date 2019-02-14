@@ -36,6 +36,26 @@ const fs = require('fs');
 
 // module.exports = app;
 
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+  host     : process.env.RDS_HOSTNAME,
+  user     : process.env.RDS_USERNAME,
+  password : process.env.RDS_PASSWORD,
+  port     : process.env.RDS_PORT
+});
+
+connection.connect(function(err) {
+  if (err) {
+    console.error('Database connection failed: ' + err.stack);
+    return;
+  }
+
+  console.log('Connected to database.');
+});
+
+connection.end();
+
 var app = http.createServer(function (req, res) {
   if (req.url.indexOf('/img') != -1) {
     var filePath = req.url.split('/img')[1];
