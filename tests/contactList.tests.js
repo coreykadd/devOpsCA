@@ -13,36 +13,36 @@ describe('Status and Connection', function(){
         });
     });
 
-    it('Database Status', function(){
-        mongoose.connection.once('open', function(){
-            console.log('Successfully connected to database');
-        });
-    });
+    // it('Database Status', function(){
+    //     mongoose.connection.once('open', function(){
+    //         console.log('Successfully connected to database');
+    //     });
+    // });
 });
 
-describe('Database Actions', function(){
-    it('Get', function(){
-        contactList.find(function(err, data){
-            if(err)
-                res.send(err);
+// describe('Database Actions', function(){
+//     it('Get', function(){
+//         contactList.find(function(err, data){
+//             if(err)
+//                 res.send(err);
     
-            console.log(data);
-            res.json(data);
-        });
-    });
+//             console.log(data);
+//             res.json(data);
+//         });
+//     });
 
-    it('Post', function(done){
-        var contact = new contactList();
-        contact.name = 'test';
-        contact.email = 'test@email.com';
-        contact.number = '0810011010';
+//     it('Post', function(done){
+//         var contact = new contactList();
+//         contact.name = 'test';
+//         contact.email = 'test@email.com';
+//         contact.number = '0810011010';
     
-        contact.save(function(err){
-            if(err)
-                res.send(err);
+//         contact.save(function(err){
+//             if(err)
+//                 res.send(err);
     
-            res.json({message: 'Contact Added'});
-        });
-        done();
-    });
-});
+//             res.json({message: 'Contact Added'});
+//         });
+//         done();
+//     });
+// });
