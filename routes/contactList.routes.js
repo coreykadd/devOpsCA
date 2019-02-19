@@ -1,84 +1,76 @@
-//contactList.routes.js
+const db = require('../db.js');
+const express = require('express');
+const router = express.Router();
 
-var contactList = require('../public/models/contactList.model.js');
+// Retrieve all contacts 
+router.get('/contacts', function (req, res) {
+    db.query('SELECT * FROM contacts', function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ error: false, data: results, message: 'Contact list.' });
+    });
+});
 
-module.exports = function(app){
-    app.get('/contactList', function(req, res){
-        console.log('Recieved get request');
-    
-        contactList.find(function(err, data){
-            if(err)
-                res.send(err);
-    
-            console.log(data);
-            res.json(data);
-        });  
+// Retrieve contact with id 
+router.get('/contact/:id', function (req, res) {
+ 
+    let contact_id = req.params.id;
+ 
+    if (!contact_id) {
+        return res.status(400).send({ error: true, message: 'Please provide contact_id' });
+    }
+ 
+    mc.query('SELECT * FROM contacts where id=?', contact_id, function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ error: false, data: results[0], message: 'Todos list.' });
     });
-    
-    app.post('/contactList', function(req, res){
-        console.log(req.body);
-    
-        var contact = new contactList();
-        contact.name = req.body.name;
-        contact.email = req.body.email;
-        contact.number = req.body.number;
-    
-        contact.save(function(err){
-            if(err)
-                res.send(err);
-    
-            res.json({message: 'Contact Added'});
-        });
+ 
+});
+
+// Add a new contact  
+router.post('/contact', function (req, res) {
+ 
+    let contact = req.body.contact;
+ 
+    if (!contact) {
+        return res.status(400).send({ error:true, message: 'Please provide contact' });
+    }
+ 
+    mc.query("INSERT INTO contacts SET ? ", { task: task }, function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ error: false, data: results, message: 'New contact has been created successfully.' });
     });
-    
-    app.delete('/contactList/:id', function(req, res){
-        var id = req.params.id;
-        console.log(id);
-    
-        contactList.remove({
-            _id: id
-        }, function(err, data){
-            if(err)
-                res.send(err);
-    
-            res.json(data);
-        });
+});
+
+
+	
+//  Delete contact
+router.delete('/contact', function (req, res) {
+ 
+    let contact_id = req.body.contact_id;
+ 
+    if (!contact_id) {
+        return res.status(400).send({ error: true, message: 'Please provide contact_id' });
+    }
+    mc.query('DELETE FROM contacts WHERE id = ?', [contact_id], function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ error: false, data: results, message: 'Contacts has been updated successfully.' });
     });
-    
-    app.get('/contactList/:id', function(req, res){
-        var id = req.params.id;
-        console.log(id);
-    
-        contactList.findOne({
-            _id: id
-        }, function(err, data){
-            if(err)
-            res.send(err);
-    
-            res.json(data);
-        });
+}); 
+
+//  Update contact with id
+router.put('/contact', function (req, res) {
+ 
+    let contact_id = req.body.contact_id;
+    let contact = req.body.contact;
+ 
+    if (!contact_id || !contact) {
+        return res.status(400).send({ error: contact, message: 'Please provide contact and contact_id' });
+    }
+ 
+    mc.query("UPDATE contacts SET contact = ? WHERE id = ?", [contact, contact_id], function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ error: false, data: results, message: 'Contact has been updated successfully.' });
     });
-    
-    app.put('/contactList/:id', function(req, res){
-        var id = req.params.id;
-        console.log(req.body.name);
-    
-        contactList.findOne({
-            _id: id
-        }, function(err, contact){
-            if(err)
-                res.send(err);
-            
-            contact.name = req.body.name;
-            contact.email = req.body.email;
-            contact.number = req.body.number;
-    
-            contact.save(function(err){
-                if(err)
-                    res.send(err);
-        
-                res.json({message: 'Contact Updated'});
-            });
-        });
-    });
-};
+});
+
+module.exports = router;

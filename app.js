@@ -2,7 +2,11 @@ require('./config/config'); //Init config variables
 
 const http = require('http');
 const fs = require('fs');
-// const express = require('express');
+const express = require('express');
+const app = express();
+
+const contacts = require('./routes/contactList.routes');
+
 // const app = express();
 // const mongoose = require('mongoose');
 // const bodyParser = require('body-parser');
@@ -22,10 +26,11 @@ const fs = require('fs');
 //     console.log('Successfully connected to database');
 // });
 
-// //Routes
+//Routes
 // require('./routes/contactList.routes.js')(app);
+app.use('/api', contacts);
 
-//Config
+// //Config
 // app.listen(CONFIG.port, function(){ 
 //   console.log('App listening on port 3000');
 // });
@@ -36,79 +41,64 @@ const fs = require('fs');
 
 // module.exports = app;
 
-var mysql = require('mysql');
+// require('./db');
 
-var connection = mysql.createConnection({
-  host     : process.env.RDS_HOSTNAME,
-  user     : process.env.RDS_USERNAME,
-  password : process.env.RDS_PASSWORD,
-  port     : process.env.RDS_PORT
-});
+// var app = http.createServer(function (req, res) {
+//   if (req.url.indexOf('/img') != -1) {
+//     var filePath = req.url.split('/img')[1];
+//     fs.readFile(__dirname + '/public/img' + filePath, function (err, data) {
+//       if (err) {
+//         res.writeHead(404, {'Content-Type': 'text/plain'});
+//         res.write('Error 404: Resource not found.');
+//         console.log(err);
+//       } else {
+//         res.writeHead(200, {'Content-Type': 'image/svg+xml'});
+//         res.write(data);
+//       }
+//       res.end();
+//     });
+//   } else if (req.url.indexOf('/js') != -1) {
+//     var filePath = req.url.split('/js')[1];
+//     fs.readFile(__dirname + '/public/js' + filePath, function (err, data) {
+//       if (err) {
+//         res.writeHead(404, {'Content-Type': 'text/plain'});
+//         res.write('Error 404: Resource not found.');
+//         console.log(err);
+//       } else {
+//         res.writeHead(200, {'Content-Type': 'text/javascript'});
+//         res.write(data);
+//       }
+//       res.end();
+//     });
+//   } else if(req.url.indexOf('/css') != -1) {
+//     var filePath = req.url.split('/css')[1];
+//     fs.readFile(__dirname + '/public/css' + filePath, function (err, data) {
+//       if (err) {
+//         res.writeHead(404, {'Content-Type': 'text/plain'});
+//         res.write('Error 404: Resource not found.');
+//         console.log(err);
+//       } else {
+//         res.writeHead(200, {'Content-Type': 'text/css'});
+//         res.write(data);
+//       }
+//       res.end();
+//     });
+//   } else {
+//     fs.readFile(__dirname + '/public/index.html', function (err, data) {
+//       if (err) {
+//         res.writeHead(404, {'Content-Type': 'text/plain'});
+//         res.write('Error 404: Resource not found.');
+//         console.log(err);
+//       } else {
+//         res.writeHead(200, {'Content-Type': 'text/html'});
+//         res.write(data);
+//       }
+//       res.end();
+//     });
+//   }
+// }).listen(CONFIG.port, '0.0.0.0');
 
-connection.connect(function(err) {
-  if (err) {
-    console.error('Database connection failed: ' + err.stack);
-    return;
-  }
+// module.exports = app;
 
-  console.log('Connected to database.');
-});
-
-connection.end();
-
-var app = http.createServer(function (req, res) {
-  if (req.url.indexOf('/img') != -1) {
-    var filePath = req.url.split('/img')[1];
-    fs.readFile(__dirname + '/public/img' + filePath, function (err, data) {
-      if (err) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-        res.write('Error 404: Resource not found.');
-        console.log(err);
-      } else {
-        res.writeHead(200, {'Content-Type': 'image/svg+xml'});
-        res.write(data);
-      }
-      res.end();
-    });
-  } else if (req.url.indexOf('/js') != -1) {
-    var filePath = req.url.split('/js')[1];
-    fs.readFile(__dirname + '/public/js' + filePath, function (err, data) {
-      if (err) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-        res.write('Error 404: Resource not found.');
-        console.log(err);
-      } else {
-        res.writeHead(200, {'Content-Type': 'text/javascript'});
-        res.write(data);
-      }
-      res.end();
-    });
-  } else if(req.url.indexOf('/css') != -1) {
-    var filePath = req.url.split('/css')[1];
-    fs.readFile(__dirname + '/public/css' + filePath, function (err, data) {
-      if (err) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-        res.write('Error 404: Resource not found.');
-        console.log(err);
-      } else {
-        res.writeHead(200, {'Content-Type': 'text/css'});
-        res.write(data);
-      }
-      res.end();
-    });
-  } else {
-    fs.readFile(__dirname + '/public/index.html', function (err, data) {
-      if (err) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-        res.write('Error 404: Resource not found.');
-        console.log(err);
-      } else {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-      }
-      res.end();
-    });
-  }
-}).listen(CONFIG.port, '0.0.0.0');
-
-module.exports = app;
+const server = http.createServer(app);
+server.listen(CONFIG.port);
