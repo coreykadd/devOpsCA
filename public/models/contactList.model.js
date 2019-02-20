@@ -3,9 +3,9 @@ var sql = require('./db.js');
 
 //Contact object constructor
 var Contact = function(contact){
-    this.contact = contact.contact;
-    this.status = contact.status;
-    this.created_at = new Date();
+    this.name = contact.name;
+    this.email = contact.email;
+    this.number = contact.number;
 };
 Contact.createContact = function createUser(newContact, result) {    
         sql.query("INSERT INTO contacts set ?", newContact, function (err, res) {
@@ -20,8 +20,8 @@ Contact.createContact = function createUser(newContact, result) {
                 }
             });           
 };
-Contact.getContactById = function createUser(taskId, result) {
-        sql.query("Select contact from contacts where id = ? ", taskId, function (err, res) {             
+Contact.getContactById = function createUser(contact_id, result) {
+        sql.query("Select contact from contacts where id = ? ", contact_id, function (err, res) {             
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);
@@ -33,7 +33,7 @@ Contact.getContactById = function createUser(taskId, result) {
             });   
 };
 Contact.getAllTask = function getAllTask(result) {
-        sql.query("Select * from tasks", function (err, res) {
+        sql.query("Select * from contacts", function (err, res) {
 
                 if(err) {
                     console.log("error: ", err);
@@ -47,7 +47,7 @@ Contact.getAllTask = function getAllTask(result) {
             });   
 };
 Contact.updateById = function(id, task, result){
-  sql.query("UPDATE tasks SET task = ? WHERE id = ?", [task.task, id], function (err, res) {
+  sql.query("UPDATE contacts SET contact = ? WHERE id = ?", [contact, id], function (err, res) {
           if(err) {
               console.log("error: ", err);
                 result(null, err);
@@ -58,7 +58,7 @@ Contact.updateById = function(id, task, result){
             }); 
 };
 Contact.remove = function(id, result){
-     sql.query("DELETE FROM tasks WHERE id = ?", [id], function (err, res) {
+     sql.query("DELETE FROM contacts WHERE id = ?", [id], function (err, res) {
 
                 if(err) {
                     console.log("error: ", err);
