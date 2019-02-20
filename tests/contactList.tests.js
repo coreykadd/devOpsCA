@@ -2,8 +2,8 @@
 
 var expect = require('chai').expect;
 var request = require('request');
-var mongoose = require('mongoose');
-var contactList = require('../public/models/contactList.model.js');
+// var mongoose = require('mongoose');
+// var contactList = require('../public/models/contactList.model.js');
 
 describe('Status and Connection', function(){
     it('Main Page status', function(){
