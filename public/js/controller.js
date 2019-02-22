@@ -10,10 +10,11 @@ myApp.controller('AppCtrl',[
 
         //Getting all contacts
         var refresh = function() {
-            $http.get('/contactList')
+            $http.get('/api/contacts')
             .then(function(res){
                 console.log('Recieved data');
-                $scope.contactList = res.data;
+                console.log(res.data.data);
+                $scope.contactList = res.data.data;
                 $scope.contact = {};
             });
         };
@@ -23,8 +24,8 @@ myApp.controller('AppCtrl',[
         //Adding a contact
         $scope.addContact = function(){
             console.log($scope.contact);
-            if($scope.contact._id !== null)
-                $scope.contact._id = null;
+            // if($scope.contact._id !== null)
+            //     $scope.contact._id = null;
 
             if($scope.contact.name == null) {
                 alert('Please enter valid name');
@@ -42,7 +43,7 @@ myApp.controller('AppCtrl',[
                 alert('Contact Added');
             }
 
-            $http.post('/contactList', $scope.contact)
+            $http.post('/api/createcontact', $scope.contact)
             .then(function(res){
                 console.log('Added contact');
                 console.log(res);
@@ -51,9 +52,9 @@ myApp.controller('AppCtrl',[
         };
 
         //Removing a contact
-        $scope.remove = function(id){
-            console.log(id);
-            $http.delete('/contactList/' + id)
+        $scope.remove = function(contact_id){
+            console.log(contact_id);
+            $http.delete('/api/deletecontact/' + contact_id)
             .then(function(res){
                 console.log('deleted contact');
                 console.log(res);
@@ -62,17 +63,18 @@ myApp.controller('AppCtrl',[
         };
 
         //Editing a contact
-        $scope.edit = function(id){
-            console.log(id);
-            $http.get('/contactList/' + id)
+        $scope.edit = function(contact_id){
+            console.log(contact_id);
+            $http.get('/api/contact/' + contact_id)
             .then(function(res){
-                $scope.contact = res.data;
+                console.log('here', res.data.data);
+                $scope.contact = res.data.data;
             });
         };
 
         //Updating a contact
         $scope.update = function(){
-            console.log($scope.contact._id);
+            console.log($scope.contact.contact_id);
             if($scope.contact.name == null) {
                 alert('Please enter valid name');
                 return;
@@ -89,7 +91,8 @@ myApp.controller('AppCtrl',[
                 alert('Contact Updated');
             }
 
-            $http.put('/contactList/' + $scope.contact._id, $scope.contact)
+            console.log('contact: ', $scope.contact);
+            $http.put('/api/updatecontact/' + $scope.contact.contact_id, $scope.contact)
             .then(function(res){
                 console.log('edited contact');
                 console.log(res);
@@ -102,7 +105,7 @@ myApp.controller('AppCtrl',[
             $scope.contactList.forEach(contact => {
                 if(contact.name == $scope.searchedName) {
                     console.log('Found Name ' + contact.name + ' ' + contact._id);
-                    $http.get('/contactList/' + contact._id)
+                    $http.get('/api/contacts/' + contact._id)
                     .then(function(res){
                         console.log(res.data);
                         res = [{'name': contact.name, 'email': contact.email, 'number' : contact.number}];

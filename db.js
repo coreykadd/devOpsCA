@@ -4,6 +4,7 @@ const mysql = require('mysql');
 
 var connection = mysql.createConnection({
     host     : CONFIG.RDS_HOSTNAME,
+    database : CONFIG.RDS_DATABASE,
     user     : CONFIG.RDS_USERNAME,
     password : CONFIG.RDS_PASSWORD,
     port     : CONFIG.RDS_PORT

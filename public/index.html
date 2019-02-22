@@ -44,11 +44,11 @@
 
                 <!--Contact List-->
                 <tr ng-repeat="contact in contactList | orderBy: sortOrder">
-                    <td>{{contact?.name}}</td>
-                    <td>{{contact?.email}}</td>
-                    <td>{{contact?.number}}</td>
-                    <td><button class="btn btn-danger" ng-click="remove(contact._id)">Remove</button></td>
-                    <td><button class="btn btn-warning" ng-click="edit(contact._id)">Edit</button></td>
+                    <td>{{contact.name}}</td>
+                    <td>{{contact.email}}</td>
+                    <td>{{contact.number}}</td>
+                    <td><button class="btn btn-danger" ng-click="remove(contact.contact_id)">Remove</button></td>
+                    <td><button class="btn btn-warning" ng-click="edit(contact.contact_id)">Edit</button></td>
                 </tr>
             </tbody>
         </table>

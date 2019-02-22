@@ -4,6 +4,7 @@ const router = express.Router();
 
 // Retrieve all contacts 
 router.get('/contacts', function (req, res) {
+
     db.query('SELECT * FROM contacts', function (error, results, fields) {
         if (error) throw error;
         return res.send({ error: false, data: results, message: 'Contact list.' });
@@ -11,31 +12,31 @@ router.get('/contacts', function (req, res) {
 });
 
 // Retrieve contact with id 
-router.get('/contact/:id', function (req, res) {
+router.get('/contact/:contact_id', function (req, res) {
  
-    let contact_id = req.params.id;
+    let contact_id = req.params.contact_id;
  
     if (!contact_id) {
         return res.status(400).send({ error: true, message: 'Please provide contact_id' });
     }
  
-    mc.query('SELECT * FROM contacts where id=?', contact_id, function (error, results, fields) {
+    db.query('SELECT * FROM contacts where contact_id = ?', contact_id, function (error, results, fields) {
         if (error) throw error;
-        return res.send({ error: false, data: results[0], message: 'Todos list.' });
+        return res.send({ error: false, data: results[0], message: 'Contacts list.' });
     });
  
 });
 
 // Add a new contact  
-router.post('/contact', function (req, res) {
+router.post('/createcontact', function (req, res) {
  
-    let contact = req.body.contact;
+    let contact = req.body;
  
     if (!contact) {
         return res.status(400).send({ error:true, message: 'Please provide contact' });
     }
  
-    mc.query("INSERT INTO contacts SET ? ", { task: task }, function (error, results, fields) {
+    db.query("INSERT INTO contacts set ?", contact, function (error, results, fields) {
         if (error) throw error;
         return res.send({ error: false, data: results, message: 'New contact has been created successfully.' });
     });
@@ -44,30 +45,32 @@ router.post('/contact', function (req, res) {
 
 	
 //  Delete contact
-router.delete('/contact', function (req, res) {
+router.delete('/deletecontact/:contact_id', function (req, res) {
  
-    let contact_id = req.body.contact_id;
+    let contact_id = req.params.contact_id;
  
     if (!contact_id) {
         return res.status(400).send({ error: true, message: 'Please provide contact_id' });
     }
-    mc.query('DELETE FROM contacts WHERE id = ?', [contact_id], function (error, results, fields) {
+    db.query('DELETE FROM contacts WHERE contact_id = ?', contact_id, function (error, results, fields) {
         if (error) throw error;
         return res.send({ error: false, data: results, message: 'Contacts has been updated successfully.' });
     });
 }); 
 
 //  Update contact with id
-router.put('/contact', function (req, res) {
+router.put('/updatecontact/:contact_id', function (req, res) {
  
-    let contact_id = req.body.contact_id;
-    let contact = req.body.contact;
- 
+    let contact_id = req.params.contact_id;
+    let contact = req.body;
+
+    console.log(req.body, res.body);
+
     if (!contact_id || !contact) {
         return res.status(400).send({ error: contact, message: 'Please provide contact and contact_id' });
     }
  
-    mc.query("UPDATE contacts SET contact = ? WHERE id = ?", [contact, contact_id], function (error, results, fields) {
+    db.query("UPDATE contacts SET name = ?, email = ?, number = ? WHERE contact_id = ?", [contact.name, contact.email, contact.number, contact_id], function (error, results, fields) {
         if (error) throw error;
         return res.send({ error: false, data: results, message: 'Contact has been updated successfully.' });
     });
