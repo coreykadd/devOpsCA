@@ -27,6 +27,7 @@ app.use(bodyParser.urlencoded())
 //     console.log('Successfully connected to database');
 // });
 
+
 //Routes
 // require('./routes/contactList.routes.js')(app);
 app.use('/api', contacts);
